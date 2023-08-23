@@ -47,25 +47,25 @@ class PermissionHandlerWeb extends PermissionHandlerPlatform {
   /// Checks the current status of the given [Permission].
   @override
   Future<PermissionStatus> checkPermissionStatus(Permission permission) async {
-    // final perm = html.window.navigator.permissions!;
-    // final permValue = permission.value;
-    // if (permissionMap[permValue]) return PermissionStatus.granted;
-    // final perms = permissionMap[permValue];
-    // if (perms is String) {
-    //   final result = (await perm.query({"name": perms})).state;
+    final perm = html.window.navigator.permissions!;
+    final permValue = permission.value;
+    if (permissionMap[permValue]) return PermissionStatus.granted;
+    final perms = permissionMap[permValue];
+    if (perms is String) {
+      final result = (await perm.query({"name": perms})).state;
 
-    //   return PermissionStatusMap[result] ?? PermissionStatus.denied;
-    // } else if (perms is List) {
-    //   var result = PermissionStatus.granted;
-    //   for (final p in perms) {
-    //     final e = (await perm.query({"name": p})).state;
-    //     if (e == "prompt" && result == PermissionStatus.granted) {
-    //       result = PermissionStatus.denied;
-    //     }
-    //     if (e == "denied") result = PermissionStatus.permanentlyDenied;
-    //   }
-    //   return result;
-    // }
+      return PermissionStatusMap[result] ?? PermissionStatus.denied;
+    } else if (perms is List) {
+      var result = PermissionStatus.granted;
+      for (final p in perms) {
+        final e = (await perm.query({"name": p})).state;
+        if (e == "prompt" && result == PermissionStatus.granted) {
+          result = PermissionStatus.denied;
+        }
+        if (e == "denied") result = PermissionStatus.permanentlyDenied;
+      }
+      return result;
+    }
     return PermissionStatus.granted;
   }
 
