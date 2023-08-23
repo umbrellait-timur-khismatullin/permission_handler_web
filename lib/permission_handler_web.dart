@@ -54,7 +54,7 @@ class PermissionHandlerWeb extends PermissionHandlerPlatform {
     if (perms is String) {
       final result = (await perm.query({"name": perms})).state;
 
-      return PermissionStatusMap[result] ?? PermissionStatus.denied;
+      return permissionStatusMap[result] ?? PermissionStatus.denied;
     } else if (perms is List) {
       var result = PermissionStatus.granted;
       for (final p in perms) {
@@ -115,6 +115,7 @@ class PermissionHandlerWeb extends PermissionHandlerPlatform {
   ///
   /// Returns a [Map] containing the status per requested [Permission].
   @override
+  // TODO(Khismatullin): implement
   Future<Map<Permission, PermissionStatus>> requestPermissions(
       List<Permission> permissions) async {
     final permObj = html.window.navigator.permissions!;
