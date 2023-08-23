@@ -1,4 +1,5 @@
 import 'dart:async';
+
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -49,7 +50,7 @@ class PermissionHandlerWeb extends PermissionHandlerPlatform {
   Future<PermissionStatus> checkPermissionStatus(Permission permission) async {
     final perm = html.window.navigator.permissions!;
     final permValue = permission.value;
-    if (permissionMap[permValue]) return PermissionStatus.granted;
+    // if (permissionMap[permValue]) return PermissionStatus.granted;
     final perms = permissionMap[permValue];
     if (perms is String) {
       final result = (await perm.query({"name": perms})).state;
@@ -115,9 +116,13 @@ class PermissionHandlerWeb extends PermissionHandlerPlatform {
   ///
   /// Returns a [Map] containing the status per requested [Permission].
   @override
-  // TODO(Khismatullin): implement
   Future<Map<Permission, PermissionStatus>> requestPermissions(
       List<Permission> permissions) async {
+    if (permissions.contains(Permission.camera) ||
+        permissions.contains(Permission.microphone)) {
+      await html.window.navigator.getUserMedia(audio: true, video: true);
+    }
+    // TODO(Khismatullin): implement
     final permObj = html.window.navigator.permissions!;
     final Map<Permission, PermissionStatus> result = {};
     for (final perm in permissions) {
